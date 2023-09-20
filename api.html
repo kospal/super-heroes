@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Heroes</title>
+
+    <style>
+
+        body{
+            background-color: lightblue;
+        }
+
+        .edit{
+            
+           top: 400px;
+           left:110px;
+           position: absolute;
+
+        }
+
+        .mytextbox{
+
+            font-size: 20px;
+            padding: 10px;
+            width:350px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+            border-radius: 10px;
+            border: 2px solid black;
+
+        }
+
+        .myimg{
+
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .mybuttons{
+
+            display: flex;
+            justify-content: center;
+            flex-direction: row;
+            align-items: center;
+
+        }
+
+        .btn1, .btn2{
+            
+            padding:10px;
+            font-size: 16px;
+            background-color: green;
+            cursor: pointer;
+            margin-right:2px;
+            border-radius: 10px;
+            padding:15px;
+            color:white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .btn1:hover, .btn2:hover{
+            
+            padding:10px;
+            font-size: 16px;
+            background-color: tomato;
+            cursor: pointer;
+            margin-right:2px;
+            border-radius: 10px;
+            padding:15px;
+            color:white;
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+
+        .mytable{
+            font-size: 36px;
+            background-color: lightgrey;
+            font-weight: bold;
+            border-collapse: collapse;
+            border: 1px solid black;
+            margin-bottom: 2px;
+            margin-bottom: 2px;
+            width:350px;
+            margin-left: auto;
+            margin-right: auto;
+            display: block;
+        }
+
+        .myheroName{
+            font-size: 40px;
+            font-weight: bold;
+            font-family: "Times New Roman", Times, serif;
+            
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div id = res class = "myimg"> <!--Div για την εμφάνιση της εικόνας-->
+
+<img src = "" > 
+
+</div>
+
+<div>
+   
+   <input type ="text" id ="myValue" class = "mytextbox" placeholder="Αναζήτησε τον ήρωα..."> <br> <!--Αναζήτηση-->
+   <div class = "mybuttons">
+    <button id = "search" class = "btn1"> Search </button> <!--Κουμπί Αναζήτησης-->
+    <button id = "edit" class = "btn2"> Next Hero </button> <!--Κουμπί για την εμφάνιση τυχαίου ήρωα-->
+   </div>
+   
+
+</div>
+
+<div id = "next" class = "mystats"> <!--Div για την εμφάνιση των στατιστικών-->
+    
+</div>
+
+    <script>
+
+    const show_img = document.getElementById('res'); //εμφάνιση εικόνας
+    const find_hero = document.getElementById('search'); //κουμπί για την εμφάνιση ήρωα στην αναζήτηση
+    const mySearch = document.getElementById("myValue"); //Παίρνει την τιμή του textbox της αναζήτησης 
+    const API = "https://superheroapi.com/api.php/2522128851269727"; // κλειδί για το ΑPI
+    const id = ""; //δήλωση μεταβλητής για το id
+    const name = ""; //δήλωση μεταβλητής για το name
+
+    const bringMe = (id) =>{ fetch(`${API}/${id}`) // fetching δεδομένων
+     .then(response => response.json())
+     .then(json => {
+        
+        const character = json; //δήλωση μεταβλητής για την χρησιμοποίησή της στην συνάρτηση
+        grt(character); // κάλεσμα συνάρτησης
+        
+        document.getElementById('next').innerHTML = grt(character).join(''); //εμφάνιση αποτελεσμάτων της συνάρτησης
+    
+    
+    }); 
+    }
+
+    const newHero = document.getElementById("edit"); //μεταβλητή για το κουμπί επιλογής του τυχαίου ήρωα
+
+   
+    bringMe(Math.floor(Math.random(id)*731)); //αυτόματη φόρτωση ήρωα όταν μπαίνουμε για πρώτη φορά στην σελίδα
+    
+
+    newHero.onclick = () => { //εκτέλεση event για την εμφάνιση τυχαίου ήρωα
+        bringMe(Math.floor(Math.random(id)*731)); //κάλεσμα και στρογγυλοποίηση για αριθμού από το 1 έως το 731 
+        
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+   const get_search = (name) =>{ fetch(`${API}/search/${name}`) //fetching δεδομένων
+    .then(response => response.json())
+    .then(json => {
+        
+         const character = json.results[0];//δήλωση μεταβλητής για την χρησιμοποίησή της στην συνάρτηση
+         grt(character);// κάλεσμα συνάρτησης
+         
+        document.getElementById('next').innerHTML = grt(character).join('');//εμφάνιση στατιστικών ήρωα
+        
+        });     
+    }
+    function grt(character){ //συνάρτηση για τον ήρωα
+
+        const arr2 = { //δημιουργία αντικειμένου για τα χαρακτηριστικά
+            Intelligence: '🧠',
+            Strength: '💪',
+            Speed: '⚡',
+            Durability: '🏋️‍♂️',
+            Power: '📊',
+            Combat: '⚔️',
+            };
+
+        const arr = Object.values(character.powerstats); //μετατροπή αντικειμένου σε πίνακα
+        const arr3 = Object.values(arr2); //μετατροπή αντικειμένου σε πίνακα
+        const arr4 = Object.keys(arr2); //μετατροπή αντικειμένου σε πίνακα
+        
+        const ress1 =  arr.map((value,index)=>{ //επανάληψη για την εμφάνιση των στατιστικών
+           
+          
+         //console.log(`${arr3[index]}${arr4[index]}:${value} </br>`);
+         return `<table class="mytable"><tr><td>${arr3[index]}</td><td>${arr4[index]}:${value}</td></tr></table>`; //εμφάνιση των στατιστικών
+        
+             
+        });
+
+        show_img.innerHTML = `<p class = "myheroName">${character.name}</p>
+        <img src = '${character.image.url}' height = 375 width = 375/>` //εμφάνιση εικόνας
+
+        return ress1; //επέστρεψε τα στατιστικά
+       
+        
+    }
+        
+       find_hero.onclick = () =>get_search(mySearch.value); //εκτέλεση event για την εμφάνιση ήρωα
+       
+       
+    </script>
+
+    
+    
+</body>
+</html>
